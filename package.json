@@ -18,5 +18,9 @@
   "packageManager": "pnpm@10.4.1",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@radix-ui/themes": "^3.2.1",
+    "react-hook-form": "^7.62.0"
   }
 }
