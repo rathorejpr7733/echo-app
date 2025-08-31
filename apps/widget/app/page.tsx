@@ -1,33 +1,26 @@
 "use client";
 
-import { useVapi } from "@/modules/widget/hooks/use-vapi";
-import { Button } from "@workspace/ui/components/button";
+import { use } from "react";
 
-export default function Page() {
-  const {
-    isSpeaking,
-    isConnecting,
-    isConnected,
-    transcript,
-    startCall,
-    endCall,
-  } = useVapi();
+import { WidgetView } from "@/modules/widget/ui/views/widget-view";
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-svh max-w-md mx-auto w-full gap-4">
-      <Button onClick={startCall}>
-        Start call
-      </Button>
 
-      <Button onClick={endCall} variant="destructive">
-        End call
-      </Button>
+interface Props {
+  searchParams: Promise<{
+    organizationId: string;
+  }>;
+};
+  
 
-      <p>isConnected: {String(isConnected)}</p>
-      <p>isConnecting: {String(isConnecting)}</p>
-      <p>isSpeaking: {String(isSpeaking)}</p>
 
-    <p>{JSON.stringify(transcript,null,2)}</p>
-    </div>
-  );
-}
+
+const  Page = ({ searchParams }: Props ) => {
+  const { organizationId } =  use(searchParams)
+
+return(
+  <WidgetView  organizationId={organizationId} />
+);
+};
+
+export default Page;
+
