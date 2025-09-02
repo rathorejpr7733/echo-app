@@ -20,6 +20,7 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/themes": "^3.2.1",
     "react-hook-form": "^7.62.0"
   }

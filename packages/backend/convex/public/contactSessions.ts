@@ -37,7 +37,7 @@
                 metadata: args.metadata,
     
              });
-             return contactSessionsId
+             return contactSessionsId;
       },
     
     });
