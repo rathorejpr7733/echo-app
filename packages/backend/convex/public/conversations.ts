@@ -7,7 +7,8 @@ import { components } from "../_generated/api";
 
 export const getOne = query({
     args: {
-        conversationId: v.id("conversations"),
+    
+        conversationId: v.id("conversations"),  
         contactSessionId: v.id("contactSessions"),
     },
     handler: async (ctx, args) => {
@@ -43,7 +44,7 @@ export const getOne = query({
         };
 
     },
-})
+});
 
 
 
