@@ -5,7 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import { WidgetHeader } from "../components/widget-header";
 import { ChevronRightIcon,  MessageSquareTextIcon } from "lucide-react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { contactSessionIdAtomFamily, errorMessageAtom, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
+import { contactSessionIdAtomFamily, conversationIdAtom, errorMessageAtom, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
 import { useMutation } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 import { useState } from "react";
@@ -13,7 +13,7 @@ import { useState } from "react";
 export const WidgetSelectionScreen = () => {
     const setScreen = useSetAtom(screenAtom);
     const setErrorMessage = useSetAtom(errorMessageAtom);
-    const setConversationId = useSetAtom(organizationIdAtom);
+    const setConversationId = useSetAtom(conversationIdAtom);
 
     const organizationId = useAtomValue(organizationIdAtom);
     const contactSessionId = useAtomValue(

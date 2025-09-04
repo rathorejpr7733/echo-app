@@ -10,7 +10,7 @@ import { Button } from "@workspace/ui/components/button";
 import { WidgetHeader } from "../components/widget-header";
 import { ArrowLeftIcon, MenuIcon } from "lucide-react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { contactSessionIdAtomFamily, conversationIdAtoms, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
+import { contactSessionIdAtomFamily, conversationIdAtom, organizationIdAtom, screenAtom } from "../../atoms/widget-atoms";
 import { useAction, useQuery } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
 
@@ -50,12 +50,12 @@ const formSchema = z.object({
 });
 
 
-export const WidgetchatScreen = () => {
+export const WidgetChatScreen = () => {
 
     const setScreen = useSetAtom(screenAtom);
-    const setConversationId = useSetAtom(conversationIdAtoms);
+    const setConversationId = useSetAtom(conversationIdAtom);
 
-    const conversationId = useAtomValue(conversationIdAtoms);
+    const conversationId = useAtomValue(conversationIdAtom);
     const organizationId = useAtomValue(organizationIdAtom);
     const contactSessionId = useAtomValue(
         contactSessionIdAtomFamily(organizationId || "" )
@@ -68,7 +68,10 @@ export const WidgetchatScreen = () => {
     };
 
     const conversation = useQuery(
-        api.public.conversations.getOne,conversationId && contactSessionId 
+        api.public.conversations.getOne,
+        
+        conversationId && 
+        contactSessionId 
         ? {
             conversationId,
             contactSessionId,
@@ -114,7 +117,7 @@ export const WidgetchatScreen = () => {
     return(
         <>
         <WidgetHeader className="flex items-center justify-between">
-                     <div className=" flex items-center justify-between ">
+                     <div className=" flex items-center gap-x-2 ">
                 <Button 
                 onClick={onBack}
                  size="icon"
