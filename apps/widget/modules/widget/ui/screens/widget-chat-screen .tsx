@@ -169,6 +169,15 @@ export const WidgetChatScreen = () => {
               >
                 <AIMessageContent>
                   <AIResponse>{message.content}</AIResponse>
+
+                  {/* if content make error we can write code like below  */}
+                  {/* <AIResponse>
+                         {message.parts
+                           .filter((p) => p.type === "text")
+                           .map((p) => p.text)
+                           .join(" ")}
+                       </AIResponse> */}
+                       
                 </AIMessageContent>
 
                 {/* Adding Avatar Component */}
