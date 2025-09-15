@@ -1,38 +1,36 @@
-// Upload & Delete files function 
+// Upload & Delete files function
 
 import { extractTextContent } from "../lib/extractTextContent";
 import { ConvexError, v } from "convex/values";
-import { 
+import {
   contentHashFromArrayBuffer,
-    Entry,
-    EntryId,
-    guessMimeTypeFromContents,
-    guessMimeTypeFromExtension,
-    vEntryId,
-    
+  Entry,
+  EntryId,
+  guessMimeTypeFromContents,
+  guessMimeTypeFromExtension,
+  vEntryId,
 } from "@convex-dev/rag";
 import { action, mutation, query, QueryCtx } from "../_generated/server";
 import rag from "../system/ai/rag";
 import { Id } from "../_generated/dataModel";
 import { paginationOptsValidator } from "convex/server";
-
-
+import { internal } from "../_generated/api";
 
 function guessMimeType(filename: string, bytes: ArrayBuffer): string {
-    return (
-        guessMimeTypeFromExtension(filename) ||
-        guessMimeTypeFromContents(bytes) || 
-        "application/octet-stream"
-    );
-};
+  return (
+    guessMimeTypeFromExtension(filename) ||
+    guessMimeTypeFromContents(bytes) ||
+    "application/octet-stream"
+  );
+}
 
 // Delete files function
 export const deleteFile = mutation({
   args: {
-    entryId : vEntryId,
+    entryId: vEntryId,
   },
   handler: async (ctx, args) => {
-      const identity = await ctx.auth.getUserIdentity();
+    const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
       throw new ConvexError({
@@ -63,34 +61,33 @@ export const deleteFile = mutation({
 
     const entry = await rag.getEntry(ctx, {
       entryId: args.entryId,
-    })
+    });
 
     if (!entry) {
-            throw new ConvexError({
+      throw new ConvexError({
         code: "NOT_FOUND",
         message: "Entry not found",
       });
     }
 
-    if (entry.metadata?.uploadedBy !== orgId){
-        throw new ConvexError({
+    if (entry.metadata?.uploadedBy !== orgId) {
+      throw new ConvexError({
         code: "UNAUTHORIZED",
         message: "Invalid Organization ID",
       });
     }
 
     if (entry.metadata?.storageId) {
-      await ctx.storage.delete(entry.metadata.storageId as Id<"_storage">)
+      await ctx.storage.delete(entry.metadata.storageId as Id<"_storage">);
     }
 
     await rag.deleteAsync(ctx, {
-      entryId: args.entryId
+      entryId: args.entryId,
     });
-
   },
 });
 
-// Upload/ add files function 
+// Upload/ add files function
 export const addFiles = action({
   args: {
     filename: v.string(),
@@ -117,6 +114,20 @@ export const addFiles = action({
       });
     }
 
+    const subscription = await ctx.runQuery(
+      internal.system.subscription.getByOrganizationId,
+      {
+        organizationId: orgId,
+      }
+    );
+
+    if (subscription?.status !== "active"){
+              throw new ConvexError({
+                code: "BAD_REQUEST",
+                message: "Missing subscription"
+              });
+            }
+
     const { bytes, filename, category } = args;
 
     const mimeType = args.mimeType || guessMimeType(filename, bytes);
@@ -124,28 +135,27 @@ export const addFiles = action({
 
     const storageId = await ctx.storage.store(blob);
 
-    const text = await extractTextContent (ctx, {
-        storageId,
-        filename,
-        bytes,
-        mimeType,
+    const text = await extractTextContent(ctx, {
+      storageId,
+      filename,
+      bytes,
+      mimeType,
     });
 
-    const { entryId , created} = await rag.add(ctx, {
-// SUPER IMPORTANT : What search space to add this to. You cannot search across namespace,
-//  If not added, it will be considered global (we do not want this)
-  namespace: orgId,
-     text,
-     key: filename,
-     title: filename,
-     metadata: {
-        storageId,   // Important for file delettion
+    const { entryId, created } = await rag.add(ctx, {
+      // SUPER IMPORTANT : What search space to add this to. You cannot search across namespace,
+      //  If not added, it will be considered global (we do not want this)
+      namespace: orgId,
+      text,
+      key: filename,
+      title: filename,
+      metadata: {
+        storageId, // Important for file delettion
         uploadedBy: orgId, // Important for delettion
         filename,
-        category:category ?? null,
-     }as EntryMetadata,
-     contentHash: await contentHashFromArrayBuffer(bytes) // To avoid re-inserting if the file content hasn;t changed
-
+        category: category ?? null,
+      } as EntryMetadata,
+      contentHash: await contentHashFromArrayBuffer(bytes), // To avoid re-inserting if the file content hasn;t changed
     });
 
     if (!created) {
@@ -153,22 +163,20 @@ export const addFiles = action({
       await ctx.storage.delete(storageId);
     }
 
-    return{
+    return {
       url: await ctx.storage.getUrl(storageId),
     };
-
   },
 });
 
-
-// For Files-list function 
+// For Files-list function
 export const list = query({
-  args:{
+  args: {
     category: v.optional(v.string()),
     paginationOpts: paginationOptsValidator,
   },
   handler: async (ctx, args) => {
-      const identity = await ctx.auth.getUserIdentity();
+    const identity = await ctx.auth.getUserIdentity();
 
     if (identity === null) {
       throw new ConvexError({
@@ -199,26 +207,24 @@ export const list = query({
       paginationOpts: args.paginationOpts,
     });
 
-    const files =await Promise.all(
-      results.page.map((entry)=> convertEntryToPublicFile(ctx, entry))
+    const files = await Promise.all(
+      results.page.map((entry) => convertEntryToPublicFile(ctx, entry))
     );
 
     const filteredFiles = args.category
-    ? files.filter((file)=> file.category === args.category )
-    : files;
+      ? files.filter((file) => file.category === args.category)
+      : files;
 
     return {
-      page:filteredFiles,
+      page: filteredFiles,
       isDone: results.isDone,
       continueCursor: results.continueCursor,
     };
   },
 });
 
-
- 
 export type PublicFile = {
-  id: EntryId,
+  id: EntryId;
   name: string;
   type: string;
   size: string;
@@ -228,18 +234,17 @@ export type PublicFile = {
 };
 
 type EntryMetadata = {
-storageId: Id<"_storage">;
-uploadedBy: string;
-filename:string;
-category : string |null;
+  storageId: Id<"_storage">;
+  uploadedBy: string;
+  filename: string;
+  category: string | null;
 };
 
-
 async function convertEntryToPublicFile(
-ctx: QueryCtx,
-entry: Entry,
+  ctx: QueryCtx,
+  entry: Entry
 ): Promise<PublicFile> {
-  const metadata = entry.metadata as EntryMetadata  | undefined;
+  const metadata = entry.metadata as EntryMetadata | undefined;
   const storageId = metadata?.storageId;
 
   let fileSize = "unknown";
@@ -248,26 +253,26 @@ entry: Entry,
     try {
       const storageMetadata = await ctx.db.system.get(storageId);
       if (storageMetadata) {
-      fileSize = formatFileSize(storageMetadata.size);
+        fileSize = formatFileSize(storageMetadata.size);
+      }
+    } catch (error) {
+      console.error("Failed to get storage metadata:", error);
     }
-  } catch (error) {
-    console.error("Failed to get storage metadata:" , error);
   }
- }
 
   const filename = entry.key || "Unknown";
   const extension = filename.split(".").pop()?.toLowerCase() || "txt";
 
   let status: "ready" | "processing" | "error" = "error";
   if (entry.status === "ready") {
-    status = "ready"
+    status = "ready";
   } else if (entry.status === "pending") {
-    status = "processing"
+    status = "processing";
   }
 
   const url = storageId ? await ctx.storage.getUrl(storageId) : null;
 
-  return{
+  return {
     id: entry.entryId,
     name: filename,
     type: extension,
@@ -276,17 +281,16 @@ entry: Entry,
     url,
     category: metadata?.category || undefined,
   };
+}
 
-};
-
-function formatFileSize(bytes: number) : string {
+function formatFileSize(bytes: number): string {
   if (bytes === 0) {
-    return "0 B"; 
-   }
+    return "0 B";
+  }
 
-   const k = 1024;
-   const sizes = ["B","KB", "MB", "GB"];
-   const i = Math.floor(Math.log(bytes)/Math.log(k));
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${Number.parseFloat((bytes / k **i ).toFixed(1))} ${sizes[i]}`;
-};
+  return `${Number.parseFloat((bytes / k ** i).toFixed(1))} ${sizes[i]}`;
+}
