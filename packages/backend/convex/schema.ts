@@ -1,11 +1,19 @@
 
-import { PhoneNumber } from "@clerk/backend";
+import { Organization, PhoneNumber } from "@clerk/backend";
 import { defineSchema , defineTable } from "convex/server";
 import { v } from "convex/values";
 
 
 export default defineSchema( {
 
+    // for subscription
+    subscriptions: defineTable({
+        OrganizationId: v.string(),
+        status:v.string(),
+    })
+      .index("by_organization_id", ["OrganizationId"]),
+
+      
     widgetSettings: defineTable({
         organizationId : v.string(),
         greetMessage: v.string(),
