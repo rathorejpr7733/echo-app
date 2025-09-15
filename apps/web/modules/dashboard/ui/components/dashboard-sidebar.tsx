@@ -34,7 +34,7 @@ import { url } from "inspector";
 const  customerSupportItems = [
     {
         title: "Conversations",
-        url: "/Conversations",
+        url: "/conversations",
          icon: InboxIcon, 
 
     },
@@ -53,7 +53,7 @@ const  customerSupportItems = [
 const  configurationItems = [
     {
         title: "Widget Customization",
-        url: "/Customization",
+        url: "/customization",
          icon: PaletteIcon, 
 
     },
