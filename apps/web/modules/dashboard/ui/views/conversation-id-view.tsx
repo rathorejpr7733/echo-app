@@ -184,7 +184,7 @@ export const ConversationIdView = ({
                                 </AIResponse> */}
 
 
-            {/* if content make error we can write code like below  */}
+            {/* if content make errors we can write code  below  */}
                   <AIResponse>
                          {message.parts
                            .filter((p) => p.type === "text")

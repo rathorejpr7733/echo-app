@@ -180,7 +180,7 @@ export const WidgetChatScreen = () => {
                         
                 </AIMessageContent>
 
-                {/* Adding Avatar Component */}
+                {/* Adding Avatar Component as logo */}
                 {message.role === "assistant" && (
                   <DicebearAvatar
                     // imageUrl="/logo.svg"
