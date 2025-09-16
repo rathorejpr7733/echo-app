@@ -230,7 +230,7 @@ export const ConversationIdView = ({
                     <AIInputButton
                         onClick={handleEnchanceResponse}
                         disabled={conversation?.status === "resolved" || 
-                         isEnhancing || form.formState.isValid }
+                         isEnhancing || !form.formState.isValid }
                     >
                         <Wand2Icon />
                         {isEnhancing ? "Enhancing..." : "Enhance"}
