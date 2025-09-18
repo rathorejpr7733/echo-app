@@ -75,23 +75,23 @@ export const VapiPhoneNumbersTab = () => {
                   {phone.name || "Unnamed"}
                 </TableCell>
 
-                <TableCell className="px-6 py-4">
-                  <Badge
-                    className="capitalize"
-                    variant={
-                      phone.status === "active" ? "default" : "destructive"
-                    }
-                  >
-                    {phone.status === "active" && (
-                      <CheckCircleIcon className="mr-1 size-3" />
-                    )}
+               <TableCell className="px-6 py-4">
+  <Badge
+    className={
+      phone.status === "active"
+        ? "bg-[#6D28D9] text-white hover:bg-[#7C3AED]" // custom purple
+        : "bg-red-500 text-white hover:bg-red-600"    // for destructive
+    }
+  >
+    {phone.status === "active" ? (
+      <CheckCircleIcon className="mr-1 size-3" />
+    ) : (
+      <XCircleIcon className="mr-1 size-3" />
+    )}
+    {phone.status || "Unknown"}
+  </Badge>
+</TableCell>
 
-                    {phone.status !== "active" && (
-                      <XCircleIcon className="mr-1 size-3" />
-                    )}
-                    {phone.status || "Unknown"}
-                  </Badge>
-                </TableCell>
               </TableRow>
             ));
           })()}

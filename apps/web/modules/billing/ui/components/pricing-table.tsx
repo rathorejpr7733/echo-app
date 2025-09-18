@@ -8,6 +8,9 @@ export const PricingTable = () => {
             <ClerkPricingTable 
              forOrganizations
              appearance={{
+              variables: {
+              colorPrimary: "#6D28D9",     //  sets button background
+                      },
                 elements: {
                     pricingTableCard: "shadow-none! border! rounded-lg!",
                     pricingTableCardHeader:"bg-background!",

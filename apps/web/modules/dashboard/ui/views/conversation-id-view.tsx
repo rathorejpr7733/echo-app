@@ -246,17 +246,14 @@ export const ConversationIdView = ({
                         {isEnhancing ? "Enhancing..." : "Enhance"}
                     </AIInputButton>
                     </AIInputTools>
-                    <AIInputSubmit
-                      disabled={
-                        conversation?.status === "resolved" ||
-                        !form.formState.isValid || 
-                         !form.formState.isSubmitting ||
-                        isEnhancing
-                      }
-                      status="ready"
-                      type="submit"
-                      />
-                </AIInputToolbar>
+                      <AIInputSubmit
+              disabled={
+                conversation?.status === "resolved" || !form.formState.isValid
+              }
+              status="ready"
+              type="submit"
+            />
+          </AIInputToolbar>
             </AIInput>
             </Form>
             </div>
