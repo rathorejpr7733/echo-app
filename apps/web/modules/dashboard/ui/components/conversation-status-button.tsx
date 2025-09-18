@@ -14,7 +14,7 @@ export const ConversationStatusButton = ({
 }) => {
     if (status === "resolved") {
         return (
-            <Hint text="Mark as unresolved">
+            <Hint  text="Mark as unresolved" >
                 <Button  disabled={disabled} onClick={onClick} size="sm" variant="tertiary" >
                     <CheckIcon />
                     Resolved

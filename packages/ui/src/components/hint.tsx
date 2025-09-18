@@ -22,13 +22,14 @@ export const Hint = ({
     align = "center",
 }: HintProps ) => {
     return(
-        <TooltipProvider>
-            <Tooltip>
-                <TooltipTrigger asChild>
-                {children}
-                </TooltipTrigger>
-                <TooltipContent>
+        <TooltipProvider >
+            <Tooltip >
+                <TooltipTrigger  asChild >
+                {children} 
+                </TooltipTrigger >
+                <TooltipContent className="bg-[#6D28D9]" >
                     <p>{text}</p>
+                    
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

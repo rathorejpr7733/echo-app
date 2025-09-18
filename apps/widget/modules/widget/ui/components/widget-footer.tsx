@@ -16,7 +16,7 @@ export const WidgetFooter = () => {
             size="icon"
             variant="ghost">
 
-                <HomeIcon className={cn("size-5", screen === "selection" && "text-primary" )} />
+                <HomeIcon className={cn("size-5", screen === "selection" && "text-[#6D28D9]" )} />
                   
 
             </Button>
@@ -27,7 +27,7 @@ export const WidgetFooter = () => {
             size="icon"
             variant="ghost">
 
-                <InboxIcon className={cn("size-5", screen === "inbox" && "text-primary" )} />
+                <InboxIcon className={cn("size-5", screen === "inbox" && "text-[#6D28D9]" )} />
                   
 
             </Button>

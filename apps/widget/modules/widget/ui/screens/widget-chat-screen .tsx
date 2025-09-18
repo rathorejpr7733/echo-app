@@ -183,10 +183,10 @@ export const WidgetChatScreen = () => {
                 {/* Adding Avatar Component as logo */}
                 {message.role === "assistant" && (
                   <DicebearAvatar
-                    // imageUrl="/logo.svg"
+                     imageUrl="/logo.svg"
                     seed="assistant"
-                    size={32}
-                    badgeImageUrl="/logo.svg"
+                    size={34}
+                    // badgeImageUrl="/logo.svg"
                   />
                 )}
               </AIMessage>
