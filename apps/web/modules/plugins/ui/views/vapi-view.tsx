@@ -34,7 +34,7 @@ import { Label } from "@workspace/ui/components/label";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "Sonner";
+import { toast } from "sonner";
 import { Button } from "@workspace/ui/components/button";
 import { VapiConnectedView } from "../components/vapi-connected-view";
 

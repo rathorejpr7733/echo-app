@@ -46,6 +46,9 @@
     "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"
   },
+  "peerDependencies": {
+    "sonner": "^2.0.7"
+  },
   "exports": {
     "./globals.css": "./src/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",
