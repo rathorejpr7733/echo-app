@@ -3,6 +3,7 @@
 import { OrganizationSwitcher , UserButton } from "@clerk/nextjs";
 import { useMutation  } from "convex/react";
 import { api } from "@workspace/backend/_generated/api";
+import { Button } from "@workspace/ui/components/button";
 
 
 export default function Page() {
@@ -17,7 +18,7 @@ export default function Page() {
 
       <OrganizationSwitcher  hidePersonal />
 
-      <button onClick={()=> addUser() } > Add</button>
+      <Button onClick={()=> addUser() } > Add</Button>
 
     </div>
 
