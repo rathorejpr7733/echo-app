@@ -47,7 +47,7 @@ export const enhanceResponse = action({
     
 
     const response = await generateText({
-      model: google("gemini-1.5-flash"),
+      model: google("gemini-pro"),
       messages: [
         {
           role: "system",
