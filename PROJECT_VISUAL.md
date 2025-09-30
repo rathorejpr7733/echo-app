@@ -1,1 +1,1 @@
-# Project_Visual
+Emptying file as preparation for deletion
