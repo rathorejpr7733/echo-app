@@ -18,7 +18,7 @@ const  Page = ({ searchParams }: Props ) => {
   const { organizationId } =  use(searchParams)
 
 return(
-  <WidgetView  organizationId={organizationId} />
+  <WidgetView  organizationId={organizationId || 'default-org-id'} />
 );
 };
 
